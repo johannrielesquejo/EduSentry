@@ -14,7 +14,7 @@ EduSentry is an academic project developed for IT Elective 1 and Data Structures
 
 🛠️ Tech Stack
 
-Frontend: HTML, CSS, JavaScript
-Backend: Node.js / Express
-Database: XAMPP / MySQL / PHP
-Deployment: Render
+* Frontend: HTML, CSS, JavaScript
+* Backend: Node.js / Express
+* Database: XAMPP / MySQL / PHP
+* Deployment: Render
