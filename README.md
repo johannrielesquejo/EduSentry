@@ -6,11 +6,11 @@ EduSentry is an academic project developed for IT Elective 1 and Data Structures
 👉 http://edusentry-0jh6.onrender.com
 
 🚀 Features:
-🔐 Secure user authentication and access control
-📊 Dashboard for monitoring educational data
-🧑‍🏫 User management (students, faculty, admin)
-📁 Data tracking and record management
-⚡ Responsive and user-friendly interface
+* 🔐 Secure user authentication and access control
+* 📊 Dashboard for monitoring educational data
+* 🧑‍🏫 User management (students, faculty, admin)
+* 📁 Data tracking and record management
+* ⚡ Responsive and user-friendly interface
 
 🛠️ Tech Stack
 
