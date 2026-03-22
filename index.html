@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="mobile-overlay" class="mobile-overlay hidden" onclick="toggleMobileSidebar()"></div>
+
+    <div id="auth-container" class="auth-wrapper">
+        <div class="auth-box">
+            <div class="auth-header">
+                <i class="fa-solid fa-graduation-cap fa-3x"></i>
+                <h1>EduSentry</h1>
+                <p>School Admin Portal</p>
+            </div>
+            
+            <div id="login-form">
+                <h2 class="auth-title">Welcome Back</h2>
+                <div class="input-group">
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="loginUsername" placeholder="Username">
+                    </div>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Password">
+                    </div>
+                    <button class="action-btn primary-btn" onclick="handleLogin()">Login <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+                <p class="switch-text">New here? <a href="#" onclick="showSignup()">Create Account</a></p>
+            </div>
+
+            <div id="signup-form" class="hidden">
+                <h2 class="auth-title">Create Account</h2>
+                <div class="input-group">
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="signupUsername" placeholder="Choose Username">
+                    </div>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="signupEmail" placeholder="Email Address">
+                    </div>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="signupPassword" placeholder="Choose Password">
+                    </div>
+                    <button class="action-btn primary-btn" onclick="handleSignup()">Sign Up</button>
+                </div>
+                <p class="switch-text">Existing user? <a href="#" onclick="showLogin()">Login</a></p>
+            </div>
+            
+            <p id="auth-message" class="status-msg"></p>
+        </div>
+    </div>
+
+    <div id="dashboard-container" class="hidden">
+        
+        <aside class="sidebar" id="mainSidebar">
+            <button class="close-sidebar-btn" onclick="toggleMobileSidebar()"><i class="fa-solid fa-times"></i></button>
+
+            <div class="brand">
+                <i class="fa-solid fa-graduation-cap"></i> EduSentry
+            </div>
+            
+            <div class="sidebar-section">
+                <h3><i class="fa-solid fa-user-graduate"></i> Student Search</h3>
+                <div class="sidebar-form">
+                    <input type="text" id="studentIdInput" placeholder="Student ID">
+                    <input type="text" id="programInput" placeholder="Program (e.g. CS)">
+                    <button class="action-btn outline-btn" onclick="handleStudentSearch()">Search</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fa-solid fa-user-tie"></i> Staff Search</h3>
+                <div class="sidebar-form">
+                    <input type="text" id="staffIdInput" placeholder="Staff ID">
+                    <input type="text" id="deptInput" placeholder="Department">
+                    <button class="action-btn outline-btn" onclick="handleStaffSearch()">Search</button>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <span id="currentUserDisplay">User</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="header-left" style="display: flex; align-items: center; gap: 15px;">
+                    <button class="icon-btn mobile-menu-btn" onclick="toggleMobileSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <h2 id="dashboardTitle">Dashboard Overview</h2>
+                        <span id="infoDisplay" class="status-badge">No User Selected</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn" onclick="toggleShortcutsModal()" title="Keyboard Shortcuts (?)">
+                        <i class="fa-regular fa-keyboard"></i>
+                    </button>
+                    <button class="logout-btn-top" onclick="handleLogout()" title="Logout (Alt + L)">
+                        <i class="fa-solid fa-power-off"></i> <span class="logout-text">Logout</span>
+                    </button>
+                </div>
+            </header>
+
+            <div id="shortcuts-modal" class="modal-overlay hidden" onclick="toggleShortcutsModal()">
+                <div class="modal-content">
+                    <h3><i class="fa-solid fa-keyboard"></i> Keyboard Shortcuts</h3>
+                    <div class="shortcut-list">
+                        <div class="sc-item"><span>Alt + S</span> Focus Student Search</div>
+                        <div class="sc-item"><span>Alt + E</span> Focus Staff/Employee Search</div>
+                        <div class="sc-item"><span>Alt + L</span> Logout</div>
+                        <div class="sc-item"><span>Esc</span> Clear / Close / Reset</div>
+                        <div class="sc-item"><span>Alt + 1</span> Switch to Admin Student Tab</div>
+                        <div class="sc-item"><span>Alt + 2</span> Switch to Admin Staff Tab</div>
+                    </div>
+                    <p style="margin-top:15px; font-size:0.8rem; color:#666;">Press <strong>?</strong> to toggle this menu</p>
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="data-column">
+                    <div class="card data-card">
+                        <div class="card-header">
+                            <h3 id="topCardTitle"><i class="fa-solid fa-list-check"></i> Records</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="mainTable">
+                                <thead id="mainTableHeader">
+                                    <tr><th>Subject/Task</th><th>Status/Grade</th><th>Action</th></tr>
+                                </thead>
+                                <tbody id="mainTableBody">
+                                    <tr><td colspan="3" class="empty-state">No records loaded</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card data-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-calendar-check"></i> Attendance History</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="attendanceTable">
+                                <thead>
+                                    <tr><th>Date</th><th>Status</th></tr>
+                                </thead>
+                                <tbody id="attendanceBody">
+                                    <tr><td colspan="2" class="empty-state">No attendance records</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="admin-panel" class="admin-panel hidden">
+                    <div class="admin-header">
+                        <h3><i class="fa-solid fa-shield-halved"></i> Admin Control</h3>
+                    </div>
+                    
+                    <div class="admin-tabs">
+                        <button class="tab-btn active" onclick="showAdminTab('student')">Student Management</button>
+                        <button class="tab-btn" onclick="showAdminTab('staff')">Staff Management</button>
+                    </div>
+
+                    <div class="scrollable-forms">
+                        
+                        <div id="admin-student-forms">
+                            
+                            <div class="form-card create-card">
+                                <h4><i class="fa-solid fa-plus-circle"></i> New Student</h4>
+                                <input type="number" id="newStudentId" placeholder="ID (e.g., 2023001)">
+                                <input type="text" id="newStudentName" placeholder="Full Name">
+                                <input type="text" id="newStudentProgram" placeholder="Program (e.g., BSIT)">
+                                <button class="action-btn small-btn" onclick="adminCreateStudent()">Create Profile</button>
+                            </div>
+
+                            <div class="form-card">
+                                <h4><i class="fa-solid fa-graduation-cap"></i> Add Grade</h4>
+                                <input type="number" id="adminStudentId" placeholder="Student ID">
+                                <input type="text" id="adminCourse" placeholder="Course Name">
+                                <div class="row">
+                                    <input type="number" id="adminGrade" placeholder="Grade (0-100)">
+                                    <button class="action-btn small-btn" onclick="adminAddGrade()">Add</button>
+                                </div>
+                            </div>
+
+                            <div class="form-card">
+                                <h4><i class="fa-solid fa-calendar"></i> Mark Attendance</h4>
+                                <input type="number" id="adminAttStudentId" placeholder="Student ID">
+                                <input type="date" id="adminAttDate">
+                                <div class="row">
+                                    <select id="adminAttStatus">
+                                        <option value="Present">Present</option>
+                                        <option value="Absent">Absent</option>
+                                        <option value="Late">Late</option>
+                                    </select>
+                                    <button class="action-btn small-btn" onclick="adminAddStudentAttendance()">Mark</button>
+                                </div>
+                            </div>
+
+                            <div class="form-card danger-zone">
+                                <h4><i class="fa-solid fa-trash-can"></i> Delete Student</h4>
+                                <div class="row">
+                                    <input type="number" id="deleteStudentId" placeholder="Student ID to Delete">
+                                    <button class="danger-btn" onclick="adminDeleteStudent()">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="admin-staff-forms" class="hidden">
+                            
+                            <div class="form-card create-card">
+                                <h4><i class="fa-solid fa-plus-circle"></i> New Staff</h4>
+                                <input type="number" id="newStaffId" placeholder="ID (e.g., 1001)">
+                                <input type="text" id="newStaffName" placeholder="Full Name">
+                                <input type="text" id="newStaffDept" placeholder="Department">
+                                <button class="action-btn small-btn" onclick="adminCreateStaff()">Create Profile</button>
+                            </div>
+
+                            <div class="form-card">
+                                <h4><i class="fa-solid fa-list-check"></i> Assign Task</h4>
+                                <input type="number" id="adminStaffId" placeholder="Staff ID">
+                                <input type="text" id="adminTask" placeholder="Task Description">
+                                <div class="row">
+                                    <select id="adminTaskStatus">
+                                        <option value="Pending">Pending</option>
+                                        <option value="In Progress">In Progress</option>
+                                        <option value="Completed">Completed</option>
+                                    </select>
+                                    <button class="action-btn small-btn" onclick="adminAddTask()">Assign</button>
+                                </div>
+                            </div>
+
+                            <div class="form-card">
+                                <h4><i class="fa-solid fa-calendar"></i> Mark Attendance</h4>
+                                <input type="number" id="adminAttStaffId" placeholder="Staff ID">
+                                <input type="date" id="adminStaffAttDate">
+                                <div class="row">
+                                    <select id="adminStaffAttStatus">
+                                        <option value="Present">Present</option>
+                                        <option value="Absent">Absent</option>
+                                    </select>
+                                    <button class="action-btn small-btn" onclick="adminAddStaffAttendance()">Mark</button>
+                                </div>
+                            </div>
+
+                            <div class="form-card danger-zone">
+                                <h4><i class="fa-solid fa-trash-can"></i> Delete Staff</h4>
+                                <div class="row">
+                                    <input type="number" id="deleteStaffId" placeholder="Staff ID to Delete">
+                                    <button class="danger-btn" onclick="adminDeleteStaff()">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <p id="admin-msg" class="status-msg"></p>
+                </div>
+
+                <div id="directory-panel" class="directory-column hidden">
+                    
+                    <div class="card directory-card">
+                        <div class="card-header dir-header">
+                            <h3><i class="fa-solid fa-users"></i> Students</h3>
+                            <select id="studentSort" onchange="sortStudents()">
+                                <option value="alpha">A-Z</option>
+                                <option value="grade">Highest Grade</option>
+                            </select>
+                        </div>
+                        <div class="directory-list" id="studentListContainer">
+                            <div class="loader">Loading...</div>
+                        </div>
+                    </div>
+
+                    <div class="card directory-card">
+                        <div class="card-header dir-header">
+                            <h3><i class="fa-solid fa-user-tie"></i> Staff</h3>
+                            <select id="staffSort" onchange="sortStaff()">
+                                <option value="alpha">A-Z</option>
+                                <option value="dept">Department</option>
+                            </select>
+                        </div>
+                        <div class="directory-list" id="staffListContainer">
+                            <div class="loader">Loading...</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

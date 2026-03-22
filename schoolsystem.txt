@@ -1,0 +1,111 @@
+-- ==========================================
+-- 1. SETUP DATABASE
+-- ==========================================
+CREATE DATABASE IF NOT EXISTS SchoolSystem;
+USE SchoolSystem;
+
+-- OPTIONAL: Drop old tables to ensure a clean slate
+DROP TABLE IF EXISTS StudentGrades;
+DROP TABLE IF EXISTS StudentAttendance;
+DROP TABLE IF EXISTS StaffTasks;
+DROP TABLE IF EXISTS StaffAttendance;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Students;
+DROP TABLE IF EXISTS Staff;
+
+-- ==========================================
+-- 2. CREATE AUTHENTICATION TABLE
+-- ==========================================
+CREATE TABLE Users (
+id INT AUTO_INCREMENT PRIMARY KEY,
+username VARCHAR(50) NOT NULL UNIQUE,
+email VARCHAR(100) NOT NULL,
+password_hash VARCHAR(255) NOT NULL
+);
+
+-- ==========================================
+-- 3. CREATE STUDENT TABLES
+-- ==========================================
+CREATE TABLE Students (
+student_id INT PRIMARY KEY,
+full_name VARCHAR(100),
+program VARCHAR(100)
+);
+
+CREATE TABLE StudentGrades (
+id INT AUTO_INCREMENT PRIMARY KEY,
+student_id INT,
+course_name VARCHAR(100),
+grade_value VARCHAR(10),
+FOREIGN KEY (student_id) REFERENCES Students(student_id)
+);
+
+CREATE TABLE StudentAttendance (
+id INT AUTO_INCREMENT PRIMARY KEY,
+student_id INT,
+att_date DATE,
+status VARCHAR(20),
+FOREIGN KEY (student_id) REFERENCES Students(student_id)
+);
+
+-- ==========================================
+-- 4. CREATE STAFF TABLES
+-- ==========================================
+CREATE TABLE Staff (
+staff_id INT PRIMARY KEY,
+full_name VARCHAR(100),
+department VARCHAR(100)
+);
+
+CREATE TABLE StaffTasks (
+id INT AUTO_INCREMENT PRIMARY KEY,
+staff_id INT,
+task_name VARCHAR(100),
+status VARCHAR(50),
+FOREIGN KEY (staff_id) REFERENCES Staff(staff_id)
+);
+
+CREATE TABLE StaffAttendance (
+id INT AUTO_INCREMENT PRIMARY KEY,
+staff_id INT,
+att_date DATE,
+status VARCHAR(20),
+FOREIGN KEY (staff_id) REFERENCES Staff(staff_id)
+);
+
+-- ==========================================
+-- 5. INSERT DUMMY DATA (For Testing)
+-- ==========================================
+
+-- A. Insert Admin User
+INSERT INTO Users (username, email, password_hash)
+VALUES ('admin', 'admin@school.edu', '123');
+
+-- B. Insert a Student: Alice Smith (ID: 101, Computer Science)
+INSERT INTO Students (student_id, full_name, program)
+VALUES (101, 'Alice Smith', 'Computer Science');
+
+INSERT INTO StudentGrades (student_id, course_name, grade_value)
+VALUES
+(101, 'Data Structures', '95'),
+(101, 'Algorithms', '88'),
+(101, 'Web Development', '92');
+
+INSERT INTO StudentAttendance (student_id, att_date, status)
+VALUES
+(101, '2023-11-01', 'Present'),
+(101, '2023-11-02', 'Present');
+
+-- C. Insert a Staff Member: Dr. Gregory House (ID: 501, Medical)
+INSERT INTO Staff (staff_id, full_name, department)
+VALUES (501, 'Dr. Gregory House', 'Medical');
+
+INSERT INTO StaffTasks (staff_id, task_name, status)
+VALUES
+(501, 'Patient Diagnosis', 'Pending'),
+(501, 'Surgery Prep', 'Completed');
+
+INSERT INTO StaffAttendance (staff_id, att_date, status)
+VALUES
+(501, '2023-11-01', 'Present'),
+(501, '2023-11-02', 'Absent');
